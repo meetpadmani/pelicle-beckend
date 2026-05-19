@@ -47,9 +47,22 @@ app.use(cors({
     if (allowed.test(origin)) {
       return callback(null, true);
     }
+    
+    // Allow production domains explicitly
+    const prodDomains = [
+      'https://pelicle.store',
+      'https://www.pelicle.store',
+      'https://pelicle-frontend.vercel.app'
+    ];
+    
+    if (prodDomains.includes(origin)) {
+      return callback(null, true);
+    }
+
     if (process.env.CLIENT_URL && origin === process.env.CLIENT_URL) {
       return callback(null, true);
     }
+    
     callback(new Error('Not allowed by CORS'));
   },
   credentials: true,
